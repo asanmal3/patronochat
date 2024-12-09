@@ -76,7 +76,7 @@ typedef struct s_file_helper {
 }              t_file_helper;
 
 ///server
-void uchat_daemon(void);
+void init_uchat_daemon(void);
 void run_the_server(char *port);
 
 

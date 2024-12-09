@@ -75,7 +75,7 @@ gint main(gint argc, char **argv) {
 
     valid_argv(argc, argv[1]);
     vm_change_working_dir(CACHE);
-    uchat_daemon();
+    init_uchat_daemon();
     info = init_info();
     port = g_ascii_strtoll(argv[1], NULL, 10);
 
