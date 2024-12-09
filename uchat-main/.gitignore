@@ -56,3 +56,4 @@ uchat
 uchat_server
 libraries/inc
 build
+.vscode
