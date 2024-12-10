@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Function to update the permission of a user in a specific room
 void edit_permission_of_user(sqlite3 *db, guint64 user_id, guint64 room_id, gint8 new) 
 {

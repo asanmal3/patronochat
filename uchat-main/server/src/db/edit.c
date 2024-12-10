@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Function to update the description of a room identified by its room_id
 void edit_room_desc_by_id(sqlite3 *db, guint64 id, gchar *new_name) 
 {

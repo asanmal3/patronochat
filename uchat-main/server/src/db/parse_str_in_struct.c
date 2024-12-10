@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Function to create a new message struct from a JSON request
 t_db_message *get_db_message(cJSON *j_request) 
 {

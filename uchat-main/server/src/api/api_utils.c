@@ -1,4 +1,4 @@
-#include "server.h"
+#include "api.h"
 
 
 gint8 get_member_type(sqlite3 *db, guint64 user_id, guint64 room_id) 

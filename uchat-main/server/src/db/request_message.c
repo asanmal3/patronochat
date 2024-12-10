@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Function to append the condition for fetching older messages to the query string
 static void message_old(sqlite3_str **str) 
 {

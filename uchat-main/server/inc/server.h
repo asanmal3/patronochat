@@ -33,8 +33,9 @@
 #include "sqlite3.h"
 #include "database.h"
 #include "vmchat.h"
-
-
+#include "responses.h"
+#include"api.h"
+#include"utils.h"
 #define MAX_CLIENTS 10
 #define BUF_SIZE 2048
 #define BACKLOG 10
@@ -51,22 +52,7 @@ typedef struct s_send_helper {
     gchar *j_data;
 }              t_send_helper;
 
-typedef struct s_info {
-    GHashTable *users;
-    sqlite3* database;
-}              t_info;
 
-typedef struct s_client {
-    GSocketConnection *conn;
-    GDataOutputStream *out;
-    GDataInputStream *in;
-    GInputStream *in_s;
-    gchar *request;
-    t_db_user *user;
-    t_info *info;
-    gboolean upload_file;
-    gboolean is_file;
-}              t_client;
 
 typedef struct s_file_helper {
     t_client *client;
@@ -75,55 +61,13 @@ typedef struct s_file_helper {
     gchar *name;
 }              t_file_helper;
 
-///server
+
 void init_uchat_daemon(void);
 void run_the_server(char *port);
-
-
-///**********************|server utils|**********************///
 void vm_send_to_all(gchar *j_data, t_client *client, guint64 room_id);
-
-
-///**********************|json_objects|**********************///
 void json_manager(t_client *client);
-///responses
-void sign_up_response(cJSON *j_request, t_client *client);
-void sign_in_response(cJSON *j_request, t_client *client);
-void new_room_response(cJSON *j_request, t_client *client);
-void get_rooms_response(cJSON *j_request, t_client *client);
-void get_members_response(cJSON *j_request, t_client *client);
-void send_message_response(cJSON *j_request, t_client *client);
-void edit_message_response(cJSON *j_request, t_client *client);
-void old_messages_response(cJSON *j_request, t_client *client);
-void log_out_response(cJSON *j_request, t_client *client);
-void search_room_response(cJSON *j_request, t_client *client);
-void search_msg_response(cJSON *j_request, t_client *client);
-void join_to_room_response(cJSON *j_request, t_client *client);
-void new_messages_response(cJSON *j_request, t_client *client);
-void new_member_response(cJSON *j_request, t_client *client);
-void upload_file_response(cJSON *j_request, t_client *client);
-void download_file_response(cJSON *j_request, t_client *client);
-void ban_member_response(cJSON *j_request, t_client *client);
-void del_room_response(cJSON *j_request, t_client *client);
-void del_msg_response(cJSON *j_request, t_client *client);
-void edit_user_response(cJSON *j_request, t_client *client);
-void get_member_info_response(cJSON *j_request, t_client *client);
-void edit_room_name_response(cJSON *j_request, t_client *client);
-void edit_room_desc_response(cJSON *j_request, t_client *client);
-void clear_room_response(cJSON *j_request, t_client *client);
 
-////api
-void get_user_id(sqlite3 *db, t_db_user *user);
-gchar *create_user_token(char *login);
-gboolean is_valid_room_name(gchar *roomname);
-gboolean is_valid_info(gchar *msg, gsize max_value);
-gint8 get_member_type(sqlite3 *db, guint64 user_id, guint64 room_id);
-GList *get_members_list(sqlite3 *db, guint64 room_id);
-gboolean read_file_req(t_client *client, gsize size, char *name);
-void download_file_req(gchar *msg, t_client *client);
 
-///utils
-t_info *init_info(void);
-void deinit_info(t_info **info);
-void deinit_client(t_client **client);
-void free_db_user(t_db_user *user);
+
+
+

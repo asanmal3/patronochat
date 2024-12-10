@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Function to free the memory allocated for a database user struct
 void free_db_user(t_db_user *user) 
 {

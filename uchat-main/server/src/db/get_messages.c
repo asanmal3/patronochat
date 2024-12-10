@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "database.h"
 // Helper function to create a JSON object representing a single message from the database result
 cJSON *get_object_message(sqlite3_stmt *stmt) 
 {
