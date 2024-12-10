@@ -579,7 +579,7 @@ SQLITE_API int sqlite3_exec(
 **
 ** The xDeviceCharacteristics method of the [sqlite3_io_methods]
 ** object returns an integer which is a vector of these
-** bit values expressing I/O characteristics of the mass storage
+** bit values expressing I/O characteristics of the mass api
 ** device that holds the file that the [sqlite3_io_methods]
 ** refers to.
 **
@@ -644,7 +644,7 @@ SQLITE_API int sqlite3_exec(
 ** these integer values as the second argument.
 **
 ** When the SQLITE_SYNC_DATAONLY flag is used, it means that the
-** sync operation only needs to flush data to mass storage.  Inode
+** sync operation only needs to flush data to mass api.  Inode
 ** information need not be flushed. If the lower four bits of the flag
 ** equal SQLITE_SYNC_NORMAL, that means to use normal fsync() semantics.
 ** If the lower four bits equal SQLITE_SYNC_FULL, that means
@@ -1069,7 +1069,7 @@ struct sqlite3_io_methods {
 ** operations since the previous successful call to 
 ** [SQLITE_FCNTL_BEGIN_ATOMIC_WRITE] to be performed atomically.
 ** This file control returns [SQLITE_OK] if and only if the writes were
-** all performed successfully and have been committed to persistent storage.
+** all performed successfully and have been committed to persistent api.
 ** ^Regardless of whether or not it is successful, this file control takes
 ** the file descriptor out of batch write mode so that all subsequent
 ** write operations are independent.
@@ -3443,7 +3443,7 @@ SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 **
 **  <li> <b>psow</b>: ^The psow parameter indicates whether or not the
 **     [powersafe overwrite] property does or does not apply to the
-**     storage media on which the database file resides.
+**     api media on which the database file resides.
 **
 **  <li> <b>nolock</b>: ^The nolock parameter is a boolean query parameter
 **     which if set disables file locking in rollback journal modes.  This
@@ -8331,7 +8331,7 @@ struct sqlite3_pcache_page {
 ** though this is not guaranteed. ^The
 ** first parameter, szPage, is the size in bytes of the pages that must
 ** be allocated by the cache.  ^szPage will always a power of two.  ^The
-** second parameter szExtra is a number of bytes of extra storage 
+** second parameter szExtra is a number of bytes of extra api
 ** associated with each page cache entry.  ^The szExtra parameter will
 ** a number less than 250.  SQLite will use the
 ** extra szExtra bytes on each page to store metadata about the underlying
@@ -8366,7 +8366,7 @@ struct sqlite3_pcache_page {
 ** The pBuf element of the returned sqlite3_pcache_page object will be a
 ** pointer to a buffer of szPage bytes used to store the content of a 
 ** single database page.  The pExtra element of sqlite3_pcache_page will be
-** a pointer to the szExtra bytes of extra storage that SQLite has requested
+** a pointer to the szExtra bytes of extra api that SQLite has requested
 ** for each entry in the page cache.
 **
 ** The page to be fetched is determined by the key. ^The minimum key value
@@ -11224,7 +11224,7 @@ SQLITE_API int sqlite3changeset_apply_v2(
 ** resolution decisions (OMIT or REPLACE) made while applying "remote".
 ** Rebasing a changeset is to update it to take those conflict 
 ** resolution decisions into account, so that the same conflicts
-** do not have to be resolved elsewhere in the network. 
+** do not have to be resolved elsewhere in the common.
 **
 ** For example, if both the local and remote changesets contain an
 ** INSERT of the same key on "CREATE TABLE t1(a PRIMARY KEY, b)":
