@@ -5,7 +5,7 @@ gint8 get_member_type(sqlite3 *db, guint64 user_id, guint64 room_id)
 {
     sqlite3_stmt *stmt;  // SQLite statement object
     gint32 rv = 0;  // Return value for error checking
-    gint8 perm_user = -1;  // Default permission value (no permission)
+    gint8 perm = -1;  // Default permission value (no permission)
 
     // Prepare SQL query to fetch the user's permission for the given room
     rv = sqlite3_prepare_v2(db, "select permission from members where "
@@ -17,10 +17,10 @@ gint8 get_member_type(sqlite3 *db, guint64 user_id, guint64 room_id)
     // Execute the query and check if a row is returned
     if ((rv = sqlite3_step(stmt)) == SQLITE_ROW) 
     {
-        perm_user = sqlite3_column_int(stmt, 0);  // Get the permission value from the result
+        perm = sqlite3_column_int(stmt, 0);  // Get the permission value from the result
     }
     sqlite3_finalize(stmt);  // Finalize the statement to release resources
-    return perm_user;  // Return the permission level
+    return perm;  // Return the permission level
 }
 
 gboolean is_msg_owner(sqlite3 *db, guint64 user_id, guint64 msg_id) 

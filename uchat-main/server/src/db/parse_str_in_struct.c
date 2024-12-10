@@ -1,20 +1,20 @@
 #include "server.h"
 #include "database.h"
 // Function to create a new message struct from a JSON request
-t_db_message *get_db_message(cJSON *j_request) 
+t_db_msg *get_db_message(cJSON *j_request) 
 {
     // Allocate memory for the message struct
-    t_db_message *message = vm_malloc(sizeof(t_db_message));
+    t_db_msg *msg = vm_malloc(sizeof(t_db_msg));
 
     // Extract values from the JSON request and assign them to the message fields
-    message->room_id = vm_get_object(j_request, "room_id")->valueint;  // Get room_id from the JSON request
-    message->type = vm_get_object(j_request, "msg_type")->valueint;     // Get message type from the JSON request
-    message->file_size = 0;  // Initialize file_size to 0 (as no file size is provided in the request)
-    message->message = g_strstrip(vm_get_valuestring(j_request, "msg")); // Get the message content and strip any extra spaces
-    message->file_name = g_strdup(""); // Initialize file_name as an empty string (no file name provided)
+    msg->room_id = vm_get_object(j_request, "room_id")->valueint;  // Get room_id from the JSON request
+    msg->type = vm_get_object(j_request, "msg_type")->valueint;     // Get message type from the JSON request
+    msg->file_size = 0;  // Initialize file_size to 0 (as no file size is provided in the request)
+    msg->msg = g_strstrip(vm_get_valuestring(j_request, "msg")); // Get the message content and strip any extra spaces
+    msg->file_name = g_strdup(""); // Initialize file_name as an empty string (no file name provided)
 
     // Return the populated message struct
-    return message;
+    return msg;
 }
 
 // Function to create a new user struct from a JSON request

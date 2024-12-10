@@ -5,15 +5,15 @@
 void delete_all_msgs(sqlite3 *db, guint64 room_id) 
 {
     sqlite3_str *sqlite_str = sqlite3_str_new(db);  // Create a new SQLite string object
-    gchar *request = NULL;  // To hold the final SQL query
+    gchar *req= NULL;  // To hold the final SQL query
 
     // Construct the SQL query to delete all messages where the room_id matches
     sqlite3_str_appendf(sqlite_str, "delete from messages where room_id = %llu", room_id);
 
     // Convert the SQLite string object into a regular string and execute the query
-    request = sqlite3_str_finish(sqlite_str);
-    sqlite3_exec(db, request, 0, 0, 0);  // Execute the query to delete messages
-    sqlite3_free(request);  // Free the allocated memory for the SQL query
+    req = sqlite3_str_finish(sqlite_str);
+    sqlite3_exec(db, req, 0, 0, 0);  // Execute the query to delete messages
+    sqlite3_free(req);  // Free the allocated memory for the SQL query
 }
 
 

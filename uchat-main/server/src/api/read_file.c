@@ -1,19 +1,6 @@
 #include "api.h"
 
-/*
- * Function: is_valid
- * -------------------------------
- * This function checks if the file is valid by verifying the size and file type.
- * - The file must exist and its size must match the expected size.
- * - The file must be a regular file (not a directory or symlink).
- * If the file fails any check, it is deleted and the function returns FALSE.
- * 
- * file: the file to be validated
- * size: the expected file size
- * bytes: the actual file size read
- * 
- * return: TRUE if the file is valid, FALSE otherwise
- */
+
 static gboolean is_valid(GFile *file, gsize size, gsize bytes) 
 {
     if (file && bytes != size) 
@@ -41,20 +28,7 @@ static gboolean is_valid(GFile *file, gsize size, gsize bytes)
     return true;  // Return true if the file is valid
 }
 
-/*
- * Function: read_file
- * -------------------------------
- * Reads the file from the client's input stream and writes it to the specified file.
- * It checks if the file size is within the allowed limit (VM_MAX_FILE_SIZE), 
- * then attempts to read the file and validate its content.
- * 
- * client: the client from which the file data is being read
- * file: the file to write the data to
- * size: the expected file size
- * out: the output stream where data is written
- * 
- * return: TRUE if the file was successfully read and validated, FALSE otherwise
- */
+
 static gboolean read_file(t_client *client, GFile *file,
                           gsize size, GFileOutputStream *out) 
 {
@@ -74,47 +48,27 @@ static gboolean read_file(t_client *client, GFile *file,
     return is_valid(file, size, bytes);
 }
 
-/*
- * Function: send_ready
- * -------------------------------
- * Sends a "ready to read" response to the client. This indicates that the server
- * is prepared to receive the file data and that the client's request has been acknowledged.
- * 
- * client: the client to send the "ready to read" response to
- */
+
 static void send_ready(t_client *client) 
 {
-    cJSON *j_request = cJSON_CreateObject();  // Create a new JSON object for the response
-    gchar *j_data = NULL;  // Variable to hold the formatted JSON data
+    cJSON *json_request = cJSON_CreateObject();  // Create a new JSON object for the response
+    gchar *json_data = NULL;  // Variable to hold the formatted JSON data
 
     // Add the token field to indicate the server is ready to read the file
-    cJSON_AddNumberToObject(j_request, "token", RQ_READY_READ);
+    cJSON_AddNumberToObject(json_request, "token", RQ_READY_READ);
     
     // Calibrate the JSON message (prepare it for transmission)
-    j_data = vm_message_calibration(j_request);
+    json_data = vm_message_calibration(json_request);
     
     // Send the "ready to read" response to the client
-    vm_send(client->out, j_data);
+    vm_send(client->out, json_data);
 
     // Free the allocated memory for the response data
-    g_free(j_data);
-    cJSON_Delete(j_request);
+    g_free(json_data);
+    cJSON_Delete(json_request);
 }
 
-/*
- * Function: read_file_req
- * -------------------------------
- * Handles the client's request to read a file. It creates the output file and 
- * reads the data from the client's input stream into this file.
- * - It first sends a "ready to read" response to the client.
- * - Then it attempts to read and write the file, ensuring that it is valid.
- * 
- * client: the client requesting the file read
- * size: the expected size of the file to be read
- * name: the name of the file to be read
- * 
- * return: TRUE if the file was successfully read and written, FALSE otherwise
- */
+
 gboolean read_file_req(t_client *client, gsize size, char *name) 
 {
     // Create a GFile object for the specified file path

@@ -2,14 +2,14 @@
 #include "database.h"
 
 // Function to retrieve the message content based on the message ID
-gchar *get_message_by_id(sqlite3 *db, guint64 message_id) 
+gchar *get_message_by_id(sqlite3 *db, guint64 msg_id) 
 {
     sqlite3_stmt *stmt;
     gchar *result = NULL;
 
     // Prepare SQL statement to retrieve the message based on its ID
     sqlite3_prepare_v2(db, "select message from messages where message_id = ?1", -1, &stmt, 0);
-    sqlite3_bind_int64(stmt, 1, message_id);  // Bind the message_id to the query
+    sqlite3_bind_int64(stmt, 1, msg_id);  // Bind the message_id to the query
     sqlite3_step(stmt);  // Execute the query
     
     // If a message is found, store the result
@@ -21,7 +21,7 @@ gchar *get_message_by_id(sqlite3 *db, guint64 message_id)
 }
 
 // Helper function to retrieve the message ID based on the room ID and date
-static void get_id_msg(sqlite3 *db, t_db_message *message) 
+static void get_id_msg(sqlite3 *db, t_db_msg *msg) 
 {
     sqlite3_stmt *stmt;
     gint32 rv = SQLITE_OK;
@@ -30,42 +30,42 @@ static void get_id_msg(sqlite3 *db, t_db_message *message)
     rv = sqlite3_prepare_v2(db, "select message_id from messages where "
                                 "room_id = ?1 and date = ?2",
                             -1, &stmt, NULL);
-    sqlite3_bind_int64(stmt, 1, message->room_id);  // Bind room_id
-    sqlite3_bind_int64(stmt, 2, message->date);     // Bind date
+    sqlite3_bind_int64(stmt, 1, msg->room_id);  // Bind room_id
+    sqlite3_bind_int64(stmt, 2, msg->date);     // Bind date
     sqlite3_step(stmt);  // Execute the query
-    message->message_id = sqlite3_column_int64(stmt, 0);  // Retrieve the message ID
+    msg->msg_id = sqlite3_column_int64(stmt, 0);  // Retrieve the message ID
     sqlite3_finalize(stmt);
 }
 
 // Helper function to bind message data to SQL statement
-static void sqlite_bind_msg(sqlite3_stmt *stmt, t_db_message *message) 
+static void sqlite_bind_msg(sqlite3_stmt *stmt, t_db_msg *msg) 
 {
-    sqlite3_bind_int(stmt, 1, message->user_id);   // Bind user_id
-    sqlite3_bind_int(stmt, 2, message->room_id);   // Bind room_id
-    sqlite3_bind_int(stmt, 3, message->date);      // Bind date
-    sqlite3_bind_text(stmt, 4, message->message, -1, SQLITE_STATIC); // Bind message
-    sqlite3_bind_int(stmt, 5, message->type);      // Bind type
-    sqlite3_bind_int(stmt, 6, message->file_size); // Bind file size
-    sqlite3_bind_text(stmt, 7, message->file_name, -1, SQLITE_STATIC); // Bind file name
-    sqlite3_bind_int(stmt, 8, message->status);    // Bind message status
+    sqlite3_bind_int(stmt, 1, msg->user_id);   // Bind user_id
+    sqlite3_bind_int(stmt, 2, msg->room_id);   // Bind room_id
+    sqlite3_bind_int(stmt, 3, msg->date);      // Bind date
+    sqlite3_bind_text(stmt, 4, msg->msg, -1, SQLITE_STATIC); // Bind message
+    sqlite3_bind_int(stmt, 5, msg->type);      // Bind type
+    sqlite3_bind_int(stmt, 6, msg->file_size); // Bind file size
+    sqlite3_bind_text(stmt, 7, msg->file_name, -1, SQLITE_STATIC); // Bind file name
+    sqlite3_bind_int(stmt, 8, msg->status);    // Bind message status
 }
 
 // Insert a new message into the database
-void insert_message_into_db(sqlite3 *db, t_db_message *message) 
+void insert_message_into_db(sqlite3 *db, t_db_msg *msg) 
 {
     sqlite3_stmt *stmt;
     gint rv;
 
-    message->date = vm_get_time(DB_SECOND);  // Set the message date
-    message->status = DB_MSG_START;  // Set message status to 'start'
+    msg->date = vm_get_time(DB_SECOND);  // Set the message date
+    msg->status = DB_MSG_START;  // Set message status to 'start'
     rv = sqlite3_prepare_v2(db, "INSERT INTO MESSAGES(USER_ID, ROOM_ID, "
                            "DATE, MESSAGE, TYPE, FILE_SIZE, FILE_NAME, STATUS)"
                            "VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8);",
                             -1, &stmt, NULL);
-    sqlite_bind_msg(stmt, message);  // Bind message data to SQL statement
+    sqlite_bind_msg(stmt, msg);  // Bind message data to SQL statement
     sqlite3_step(stmt);  // Execute the SQL
     sqlite3_finalize(stmt);
-    get_id_msg(db, message);  // Retrieve message ID
+    get_id_msg(db, msg);  // Retrieve message ID
 }
 
 // Function to retrieve room details by its ID

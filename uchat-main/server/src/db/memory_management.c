@@ -52,25 +52,25 @@ void free_room(t_db_room **room)
 }
 
 // Function to free the memory allocated for a message struct
-void free_message(t_db_message **message) 
+void free_message(t_db_msg **msg) 
 {
     // Check if the message pointer is valid and if the message itself is not NULL
-    if (!message || !*message)
+    if (!msg || !*msg)
     {    
         return;  // If either is NULL, do nothing and return
     }
 
     // Free the individual fields of the message if they are not NULL
-    if ((*message)->message)
+    if ((*msg)->msg)
     {    
-        g_free((*message)->message);  // Free the memory allocated for the message content
+        g_free((*msg)->msg);  // Free the memory allocated for the message content
     }
-    if ((*message)->file_name)
+    if ((*msg)->file_name)
     {    
-        g_free((*message)->file_name);  // Free the memory allocated for the file name (if any)
+        g_free((*msg)->file_name);  // Free the memory allocated for the file name (if any)
     }
 
     // Free the memory allocated for the message struct itself
-    vm_free((void **)message);  // Custom memory free function (likely for freeing a double pointer)
-    message = NULL;  // Set the message pointer to NULL to prevent dangling pointer
+    vm_free((void **)msg);  // Custom memory free function (likely for freeing a double pointer)
+    msg = NULL;  // Set the message pointer to NULL to prevent dangling pointer
 }

@@ -11,17 +11,17 @@ typedef struct s_member{
     gint8   prm;
 }              t_member;
 
-typedef struct s_db_message {
+typedef struct s_db_msg {
     guint64 user_id;
     guint64 room_id;
-    guint64 message_id;
+    guint64 msg_id;
     guint64 date;
     gint8 status;
     gint8 type;
     guint64 file_size;
-    gchar *message;
+    gchar *msg;
     gchar *file_name;
-}              t_db_message;
+}              t_db_msg;
 
 typedef struct s_db_user {
     guint64 user_id;
@@ -53,12 +53,12 @@ bool user_exists(sqlite3 *db, char *username);
 sqlite3 *open_db();
 
 
-t_db_message *get_db_message(cJSON *message_j);
+t_db_msg *get_db_message(cJSON *msg_j);
 t_db_user *get_db_user(cJSON *j_request);
 t_db_room *get_db_room(cJSON *j_request);
 void close_db(sqlite3 *db);
 
-void free_message(t_db_message **message);
+void free_message(t_db_msg**msg);
 void free_room(t_db_room **room);
 void free_user(t_db_user **user);
 
@@ -75,7 +75,7 @@ cJSON *get_object_message(sqlite3_stmt *stmt);
 void insert_member_into_db(sqlite3 *db, guint64 room_id, guint64 user_id, gint8 permission);
 t_db_room *get_room_by_id(sqlite3 *db, guint64 id);
 cJSON *get_new_messages_by_id(sqlite3 *db, guint64 room_id, guint64 date, gint64 count);
-void insert_message_into_db(sqlite3 *db, t_db_message *message);
+void insert_message_into_db(sqlite3 *db, t_db_msg *message);
 t_db_user *get_user_by_token(sqlite3 *db, gchar *token);
 t_db_user *get_user_by_login(sqlite3 *db, gchar *login);
 gchar *get_message_by_id(sqlite3 *db, guint64 message_id);
