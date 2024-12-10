@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <stdio.h>
 #include <sys/socket.h>
@@ -237,3 +238,5 @@ t_groom *get_groom_by_id(guint64 room_id, GtkBuilder *builder);
 
 ///**********************|gmsg utils|**********************///
 t_gmsg *get_selected_gmsg(GtkBuilder *builder);
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERVER_H
+#define SERVER_H
 
 #if defined(__APPLE__)
 #include <malloc/malloc.h>
@@ -67,7 +68,7 @@ void run_the_server(char *port);
 void vm_send_to_all(gchar *j_data, t_client *client, guint64 room_id);
 void json_manager(t_client *client);
 
-
+#endif
 
 
 

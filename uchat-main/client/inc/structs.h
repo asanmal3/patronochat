@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRUCTS_H
+#define STRUCTS_H
 #include "client.h"
 #include "defines.h"
 
@@ -138,3 +139,6 @@ typedef struct s_filter_data {
     gboolean is_found_rooms;
     gchar *search_name;
 }           t_filter_data;
+
+
+#endif

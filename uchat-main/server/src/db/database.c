@@ -51,7 +51,7 @@ static void sqlite_bind_msg(sqlite3_stmt *stmt, t_db_msg *msg)
 }
 
 // Insert a new message into the database
-void insert_message_into_db(sqlite3 *db, t_db_msg *msg) 
+void add_message_to_db(sqlite3 *db, t_db_msg *msg) 
 {
     sqlite3_stmt *stmt;
     gint rv;
@@ -163,7 +163,7 @@ static cJSON *get_object_room(sqlite3_stmt *stmt)
 // Function to retrieve rooms for a user created after a specified date
 cJSON *get_json_rooms(sqlite3 *db, guint64 date, guint64 user_id) 
 {
-    cJSON *j_rooms = cJSON_CreateArray();
+    cJSON *json_rooms = cJSON_CreateArray();
     sqlite3_stmt *stmt;
 
     sqlite3_prepare_v2(db, "SELECT * FROM ROOMS WHERE ID IN (SELECT ROOM"
@@ -175,10 +175,10 @@ cJSON *get_json_rooms(sqlite3 *db, guint64 date, guint64 user_id)
     sqlite3_bind_int64(stmt, 2, user_id);  // Bind the user_id
     sqlite3_bind_int(stmt, 3, DB_BANNED);  // Exclude banned users
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        cJSON_AddItemToArray(j_rooms, get_object_room(stmt));  // Add rooms to the JSON array
+        cJSON_AddItemToArray(json_rooms, get_object_room(stmt));  // Add rooms to the JSON array
     }
     sqlite3_finalize(stmt);
-    return j_rooms;
+    return json_rooms;
 }
 
 // Function to search rooms by name for a specific user
@@ -307,7 +307,7 @@ cJSON *get_json_members(sqlite3 *db, guint64 room_id)
 }
 
 // Inserts a new member into the MEMBERS table
-void insert_member_into_db(sqlite3 *db,
+void add_member_to_db(sqlite3 *db,
                            guint64 room_id,
                            guint64 user_id,
                            gint8 permission) 
@@ -337,7 +337,7 @@ static void sqlite_bind_room(sqlite3_stmt *stmt, t_db_room *room)
 }
 
 // Inserts a new room into the database and adds the creator as a member
-void insert_room_into_db(sqlite3 *db, t_db_room *room) 
+void add_room_to_db(sqlite3 *db, t_db_room *room) 
 {
     sqlite3_stmt *stmt;
     gint32 rv = SQLITE_OK;
@@ -360,7 +360,7 @@ void insert_room_into_db(sqlite3 *db, t_db_room *room)
 }
 
 // Updates the user's auth token in the database
-void insert_auth_token(sqlite3 *db, gchar *login, gchar *auth_token) 
+void add_auth_token(sqlite3 *db, gchar *login, gchar *auth_token) 
 {
     sqlite3_stmt *stmt;
     sqlite3_prepare_v2(db, "UPDATE USERS SET AUTH_TOKEN = ?1 WHERE LOGIN = ?2", -1, &stmt, 0);

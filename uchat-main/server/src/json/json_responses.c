@@ -159,7 +159,8 @@ void del_room_response(cJSON *json_request, t_client *client)
     cJSON_Delete(json_response);
 }
 
-void ban_member_response(cJSON *json_request, t_client *client) {
+void ban_member_response(cJSON *json_request, t_client *client) 
+{
     guint64 room_id = vm_get_object(json_request, "room_id")->valueint;
     guint64 user_id = vm_get_object(json_request, "user_id")->valueint;
     cJSON *json_response = cJSON_CreateObject();
@@ -235,7 +236,8 @@ static gpointer upload_file_thread(gpointer data)
     #error "Unsupported OS"
 #endif
 
-    if (read_file_req(file->client, file->size, filename) == true) {
+    if (read_file_req(file->client, file->size, filename) == true) 
+    {
         cJSON_AddNumberToObject(json_response, "room_id", file->room_id);
         cJSON_AddStringToObject(json_response, "msg", filename);
         cJSON_AddNumberToObject(json_response, "msg_type", DB_FILE_MSG);
@@ -332,14 +334,16 @@ void join_to_room_response(cJSON *json_request, t_client *client)
     cJSON_Delete(json_response);
 }
 
-void search_msg_response(cJSON *json_request, t_client *client) {
+void search_msg_response(cJSON *json_request, t_client *client) 
+{
     gchar *search_msg = vm_get_valuestring(json_request, "search_msg");
     guint64 room_id = vm_get_object(json_request, "room_id")->valueint;
     cJSON *json_response = cJSON_CreateObject();
     cJSON *json_msgs = NULL;
     gchar *json_data = NULL;
 
-    if (is_valid_msg_rq(search_msg, client->info->database, client->user->user_id, room_id)) {
+    if (is_valid_msg_rq(search_msg, client->info->database, client->user->user_id, room_id)) 
+    {
         json_msgs = search_msgs_in_db(client->info->database,
                                    client->user->user_id,
                                    search_msg);
@@ -355,13 +359,15 @@ void search_msg_response(cJSON *json_request, t_client *client) {
     cJSON_Delete(json_response);
 }
 
-void search_room_response(cJSON *json_request, t_client *client) {
+void search_room_response(cJSON *json_request, t_client *client) 
+{
     cJSON *json_response = cJSON_CreateObject();
     cJSON *json_rooms = NULL;
     gchar *search_name = vm_get_valuestring(json_request, "search_name");
     gchar *json_data = NULL;
 
-    if (strlen(search_name) > 0 && strlen(search_name) <= MAX_ROOM_LEN) {
+    if (strlen(search_name) > 0 && strlen(search_name) <= MAX_ROOM_LEN) 
+    {
         json_rooms = search_rooms_in_db(client->info->database,
                                      client->user->user_id,
                                      search_name);
@@ -475,7 +481,8 @@ void send_message_response(cJSON *json_request, t_client *client)
     cJSON *json_response = cJSON_CreateObject();
     gchar *json_data = NULL;
 
-    if (is_valid_msg_rq(msg->msg, client->info->database, client->user->user_id, msg->room_id)) {
+    if (is_valid_msg_rq(msg->msg, client->info->database, client->user->user_id, msg->room_id)) 
+    {
         msg->user_id = client->user->user_id;
         insert_message_into_db(client->info->database, msg);
 
@@ -565,7 +572,7 @@ void get_rooms_response(cJSON *json_request, t_client *client)
     cJSON_Delete(json_response);
 }
 
-void sign_in_response(cJSON *json_request, t_client *client) 
+void sign_in(cJSON *json_request, t_client *client) 
 {
     cJSON *json_response = cJSON_CreateObject();
     gchar *json_data = NULL;
@@ -616,7 +623,7 @@ void sign_in_response(cJSON *json_request, t_client *client)
     cJSON_Delete(json_response);
 }
 
-void sign_up_response(cJSON *json_request, t_client *client) 
+void sign_up(cJSON *json_request, t_client *client) 
 {
     t_db_user *user = get_db_user(json_request);
     cJSON *json_response = cJSON_CreateObject();
@@ -635,7 +642,7 @@ void sign_up_response(cJSON *json_request, t_client *client)
     {
         client->user = user;
         create_new_user(client->info->database, user);
-        sign_in_response(json_request, client);
+        sign_in(json_request, client);
     }
 
     cJSON_Delete(json_response);

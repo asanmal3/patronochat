@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include "server.h"
 
@@ -44,8 +45,8 @@ typedef struct s_db_room {
 
 cJSON *get_json_rooms(sqlite3 *db, guint64 date, guint64 user_id);
 cJSON *get_json_members(sqlite3 *db, guint64 room_id);
-void insert_room_into_db(sqlite3 *db, t_db_room *room);
-void insert_auth_token(sqlite3 *db, char *username, char *token);
+void add_room_to_db(sqlite3 *db, t_db_room *room);
+void add_auth_token(sqlite3 *db, char *username, char *token);
 bool user_not_online(sqlite3 *db, char *username);
 bool correct_credentials(sqlite3 *db, char *username, char *password);
 void create_new_user(sqlite3 *db, t_db_user *user);
@@ -72,10 +73,10 @@ void edit_user_name_by_id(sqlite3 *db, guint64 id, gchar *new_name);
 cJSON *search_rooms_in_db(sqlite3 *db, guint64 user_id, gchar *str_search);
 cJSON *search_msgs_in_db(sqlite3 *db, guint64 user_id, gchar *str_search);
 cJSON *get_object_message(sqlite3_stmt *stmt);
-void insert_member_into_db(sqlite3 *db, guint64 room_id, guint64 user_id, gint8 permission);
+void add_member_to_db(sqlite3 *db, guint64 room_id, guint64 user_id, gint8 permission);
 t_db_room *get_room_by_id(sqlite3 *db, guint64 id);
 cJSON *get_new_messages_by_id(sqlite3 *db, guint64 room_id, guint64 date, gint64 count);
-void insert_message_into_db(sqlite3 *db, t_db_msg *message);
+void add_message_to_db(sqlite3 *db, t_db_msg *message);
 t_db_user *get_user_by_token(sqlite3 *db, gchar *token);
 t_db_user *get_user_by_login(sqlite3 *db, gchar *login);
 gchar *get_message_by_id(sqlite3 *db, guint64 message_id);
@@ -89,3 +90,5 @@ void edit_room_name_by_id(sqlite3 *db, guint64 id, gchar *new_name);
 void edit_room_desc_by_id(sqlite3 *db, guint64 id, gchar *new_name);
 void delete_message_by_id(sqlite3 *db, guint64 id);
 void delete_all_msgs(sqlite3 *db, guint64 room_id);
+
+#endif
