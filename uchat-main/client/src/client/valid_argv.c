@@ -2,8 +2,8 @@
 #include <netdb.h>
 
 static void err() {
-    fprintf(stderr, "Usage: ./uchat <ip address> <port>\n"
-                    "or:    ./uchat <hostname>:<port>\n");
+    fprintf(stderr, "Usage: ./uchat1 <ip address> <port>\n"
+                    "or:    ./uchat1 <hostname>:<port>\n");
     exit(EXIT_FAILURE);
 }
 
